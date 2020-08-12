@@ -92,6 +92,13 @@ if __name__ == "__main__":
 
     # ----- MODEL ----- #
     model = build_autoencoder()
+
+    model.compile(
+        loss=tf.keras.losses.mse,
+        optimizer=tf.keras.optimizers.Adam(),
+        metrics=["accuracy"]
+    )
+
     model.summary()
 
     # ----- TRAIN ----- #
