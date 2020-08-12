@@ -10,6 +10,7 @@ conda activate Anomaly-Detection
 """
 ################################################################################
 # Imports
+from model import build_autoencoder
 from parameters import *
 
 
@@ -90,6 +91,8 @@ if __name__ == "__main__":
     print(f'Shape of test labels: {test_labels.shape}')
 
     # ----- MODEL ----- #
+    model = build_autoencoder()
+    model.summary()
 
     # ----- TRAIN ----- #
 
