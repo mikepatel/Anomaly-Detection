@@ -19,3 +19,6 @@ import tensorflow as tf
 IMAGE_WIDTH = 28
 IMAGE_HEIGHT = 28
 IMAGE_CHANNELS = 1
+
+NUM_EPOCHS = 1
+BATCH_SIZE = 64

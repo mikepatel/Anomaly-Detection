@@ -85,6 +85,8 @@ if __name__ == "__main__":
     train_labels = x_labels + a_labels[:30]
     train_labels = np.array(train_labels)
 
+    train_images = train_images.reshape(-1, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNELS)
+
     print(f'Shape of train images: {train_images.shape}')
     print(f'Shape of train labels: {train_labels.shape}')
     print(f'Shape of test images: {test_images.shape}')
@@ -102,5 +104,11 @@ if __name__ == "__main__":
     model.summary()
 
     # ----- TRAIN ----- #
+    history = model.fit(
+        x=train_images,
+        y=train_images,
+        epochs=NUM_EPOCHS,
+        batch_size=BATCH_SIZE
+    )
 
     # ----- PREDICT ----- #

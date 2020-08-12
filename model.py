@@ -64,4 +64,11 @@ def build_autoencoder():
         activation=tf.keras.activations.relu
     ))
 
+    model.add(tf.keras.layers.Conv2DTranspose(
+        filters=1,
+        kernel_size=(3, 3),
+        padding="same",
+        activation=tf.keras.activations.relu
+    ))
+
     return model
