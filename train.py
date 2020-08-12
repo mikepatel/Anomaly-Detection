@@ -86,6 +86,7 @@ if __name__ == "__main__":
     train_labels = np.array(train_labels)
 
     train_images = train_images.reshape(-1, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNELS)
+    test_images = test_images.reshape(-1, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNELS)
 
     print(f'Shape of train images: {train_images.shape}')
     print(f'Shape of train labels: {train_labels.shape}')
@@ -112,3 +113,23 @@ if __name__ == "__main__":
     )
 
     # ----- PREDICT ----- #
+    prediction = model.predict(train_images)
+    train_mse_loss = np.mean(np.power((prediction-train_images), 2))
+
+    threshold = np.max(train_mse_loss)
+
+    # get test MSE loss
+    test_prediction = model.predict(test_images)
+    test_mse_loss = np.mean(np.power((test_prediction-test_images), 2))
+
+    # detect anomalies
+    idx = []
+    for i in range(len(test_labels)):
+        if test_labels[i] == 9:
+            idx.append(i)
+
+    print(f'Actual indices of label=9: {idx}')
+
+    anomalies = (test_mse_loss > threshold).tolist()
+    print(f'Number of anomalies: {np.sum(anomalies)}')
+    print(f'Predicted indices of label=9: {np.where(anomalies)}')
