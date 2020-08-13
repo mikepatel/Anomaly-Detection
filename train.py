@@ -48,6 +48,9 @@ if __name__ == "__main__":
     class2int = {u: i for i, u in enumerate(categories)}
     int2class = {i: u for i, u in enumerate(categories)}
 
+    print(f'Anomaly label: {ANOMALY_LABEL}')
+    print(f'Anomaly category: {int2class[ANOMALY_LABEL]}')
+
     #print(class2int)
 
     # get count of each category, 6k of each
@@ -64,11 +67,11 @@ if __name__ == "__main__":
     a_images = []
     a_labels = []
     for i in range(len(train_images)):
-        if train_labels[i] != 9:  # label != 9
+        if train_labels[i] != ANOMALY_LABEL:
             x_images.append(train_images[i])
             x_labels.append(train_labels[i])
 
-        else:  # label = 9
+        else:  # label = ANOMALY_LABEL
             a_images.append(train_images[i])
             a_labels.append(train_labels[i])
 
@@ -112,24 +115,46 @@ if __name__ == "__main__":
         batch_size=BATCH_SIZE
     )
 
+    # plot training accuracy
+    plt.plot(history.history["accuracy"], label="accuracy")
+    plt.title("Training Accuracy")
+    plt.xlabel("Epoch")
+    plt.ylabel("Accuracy")
+    plt.grid()
+    plt.legend(loc="lower right")
+    plt.savefig(os.path.join(os.getcwd(), "training"))
+
     # ----- PREDICT ----- #
+    # calculate threshold
     prediction = model.predict(train_images)
     train_mse_loss = np.mean(np.power((prediction-train_images), 2))
 
-    threshold = np.max(train_mse_loss)
+    threshold = np.max(train_mse_loss)  # single value threshold
 
-    # get test MSE loss
+    # calculate test MSE loss
     test_prediction = model.predict(test_images)
-    test_mse_loss = np.mean(np.power((test_prediction-test_images), 2))
+    test_diff = test_prediction - test_images
+    test_mse_loss = []
+    for i in range(len(test_diff)):
+        mse = np.mean(np.power(test_diff[i], 2))
+        test_mse_loss.append(mse)
 
     # detect anomalies
+    # actual indices
     idx = []
     for i in range(len(test_labels)):
-        if test_labels[i] == 9:
+        if test_labels[i] == ANOMALY_LABEL:
             idx.append(i)
 
     print(f'Actual indices of label=9: {idx}')
+    print(f'Actual number of label=9: {len(idx)}')
+    print()
 
-    anomalies = (test_mse_loss > threshold).tolist()
-    print(f'Number of anomalies: {np.sum(anomalies)}')
-    print(f'Predicted indices of label=9: {np.where(anomalies)}')
+    # predicted indices
+    pred_idx = []
+    for i in range(len(test_mse_loss)):
+        if test_mse_loss[i] > threshold:
+            pred_idx.append(i)
+
+    print(f'Predicted indices of label=9: {pred_idx}')
+    print(f'Number of anomalies: {len(pred_idx)}')
