@@ -115,11 +115,11 @@ if __name__ == "__main__":
         batch_size=BATCH_SIZE
     )
 
-    # plot training accuracy
-    plt.plot(history.history["accuracy"], label="accuracy")
-    plt.title("Training Accuracy")
+    # plot training loss
+    plt.plot(history.history["loss"], label="loss")
+    plt.title("Training Loss")
     plt.xlabel("Epoch")
-    plt.ylabel("Accuracy")
+    plt.ylabel("Loss")
     plt.grid()
     plt.legend(loc="lower right")
     plt.savefig(os.path.join(os.getcwd(), "training"))
