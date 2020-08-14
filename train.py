@@ -116,13 +116,14 @@ if __name__ == "__main__":
     )
 
     # plot training loss
+    plt.figure(figsize=(20, 10))
     plt.plot(history.history["loss"], label="loss")
     plt.title("Training Loss")
     plt.xlabel("Epoch")
     plt.ylabel("Loss")
     plt.grid()
     plt.legend(loc="lower right")
-    plt.savefig(os.path.join(os.getcwd(), "training"))
+    plt.savefig(os.path.join(VISUALIZATION_DIR, "training"))
 
     # save model
     model.save(SAVE_DIR)
@@ -144,12 +145,13 @@ if __name__ == "__main__":
 
     # plot test loss
     plt.close()
+    plt.figure(figsize=(20, 10))
     plt.hist(test_mse_loss, bins=100)
     plt.title("Test Loss")
     plt.xlabel("Test Loss")
     plt.ylabel("Number of samples")
     plt.grid()
-    plt.savefig(os.path.join(os.getcwd(), "test_histogram"))
+    plt.savefig(os.path.join(VISUALIZATION_DIR, "test_histogram"))
 
     # detect anomalies
     # actual indices
@@ -158,9 +160,26 @@ if __name__ == "__main__":
         if test_labels[i] == ANOMALY_LABEL:
             idx.append(i)
 
-    print(f'Actual indices of label=9: {idx}')
+    #print(f'Actual indices of label=9: {idx}')
     print(f'Actual number of label=9: {len(idx)}')
     print()
+
+    # plot at which indices should be considered anomalies
+    x = range(len(test_labels))
+    y = []
+    for i in x:
+        if test_labels[i] == ANOMALY_LABEL:
+            y.append(1)
+        else:
+            y.append(0)
+
+    plt.close()
+    plt.figure(figsize=(20, 10))
+    plt.bar(x, y)
+    plt.title("Actual Anomalies")
+    plt.xlabel("Index")
+    plt.grid()
+    plt.savefig(os.path.join(VISUALIZATION_DIR, "actual_anomalies"))
 
     # predicted indices
     pred_idx = []
@@ -168,5 +187,22 @@ if __name__ == "__main__":
         if test_mse_loss[i] > threshold:
             pred_idx.append(i)
 
-    print(f'Predicted indices of label=9: {pred_idx}')
+    #print(f'Predicted indices of label=9: {pred_idx}')
     print(f'Number of anomalies: {len(pred_idx)}')
+
+    # plot at which indices predicted anomalies
+    x = range(len(test_mse_loss))
+    y = []
+    for i in x:
+        if test_mse_loss[i] > threshold:
+            y.append(1)
+        else:
+            y.append(0)
+
+    plt.close()
+    plt.figure(figsize=(20, 10))
+    plt.bar(x, y)
+    plt.title("Predicted Anomalies")
+    plt.xlabel("Index")
+    plt.grid()
+    plt.savefig(os.path.join(VISUALIZATION_DIR, "predicted_anomalies"))
