@@ -124,6 +124,9 @@ if __name__ == "__main__":
     plt.legend(loc="lower right")
     plt.savefig(os.path.join(os.getcwd(), "training"))
 
+    # save model
+    model.save(SAVE_DIR)
+
     # ----- PREDICT ----- #
     # calculate threshold
     prediction = model.predict(train_images)
@@ -138,6 +141,15 @@ if __name__ == "__main__":
     for i in range(len(test_diff)):
         mse = np.mean(np.power(test_diff[i], 2))
         test_mse_loss.append(mse)
+
+    # plot test loss
+    plt.close()
+    plt.hist(test_mse_loss, bins=100)
+    plt.title("Test Loss")
+    plt.xlabel("Test Loss")
+    plt.ylabel("Number of samples")
+    plt.grid()
+    plt.savefig(os.path.join(os.getcwd(), "test_histogram"))
 
     # detect anomalies
     # actual indices
