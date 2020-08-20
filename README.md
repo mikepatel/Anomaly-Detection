@@ -7,3 +7,5 @@ Simple autoencoder to perform anomaly detection
 
 ## Model
 * Using a convolutional autoencoder model architecture
+
+## Results
