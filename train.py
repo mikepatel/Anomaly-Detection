@@ -83,9 +83,9 @@ if __name__ == "__main__":
     print(len(a_labels[:30]))
     """
 
-    train_images = x_images + a_images[:30]
+    train_images = x_images + a_images[:NUM_TRAIN_ANOMALY]
     train_images = np.array(train_images)
-    train_labels = x_labels + a_labels[:30]
+    train_labels = x_labels + a_labels[:NUM_TRAIN_ANOMALY]
     train_labels = np.array(train_labels)
 
     train_images = train_images.reshape(-1, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNELS)
